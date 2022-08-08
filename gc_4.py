@@ -2,10 +2,10 @@
 Granger causality
 
 CC ground truth:    nonlinear eq16 c=0.5
-GC distribution:    F
+GC distribution:    unknown (pretending to F)
 GC method:          pairwise
 Bootstrap used:     Y
-Prediction model:   SVM regression C=1, kernel='rbf'
+Prediction model:   SVM regression C=0.1, kernel='rbf' (carefully tuned)
 """
 import numpy as np
 from sklearn.svm import SVR
