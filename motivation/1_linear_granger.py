@@ -4,7 +4,7 @@ Granger causality
 CC ground truth:    linear eq15 c=0.5 noise=0.01
 GC distribution:    F
 GC method:          pairwise
-Bootstrap used:     Y
+Prevent sparsity:   N
 Prediction model:   Linear regression
 """
 import numpy as np
@@ -35,10 +35,8 @@ for i, j in product(range(n_nodes), range(n_nodes)):
     y_r = nj[1:, np.newaxis]
     x_ur_train, x_ur_test = x_ur[:train_size], x_ur[train_size:]
     y_ur_train, y_ur_test = y_ur[:train_size], y_ur[train_size:]
-    x_r_train, x_r_test, y_r_train, y_r_test = x_ur_train.copy(), x_ur_test.copy(), y_ur_train.copy(), y_ur_test.copy()
-    rng = np.random.RandomState(seed=306)
-    rng.shuffle(x_r_train[:, 0])  # shuffle x_{t-1} -> R: y_{t} ~ y_{t-1}
-    rng.shuffle(x_r_test[:, 0])
+    x_r_train, x_r_test = x_r[:train_size], x_r[train_size:]
+    y_r_train, y_r_test = y_r[:train_size], y_r[train_size:]
 
     # train model
     ur = LinearRegression().fit(x_ur_train, y_ur_train)

@@ -2,13 +2,13 @@
 Granger causality
 
 CC ground truth:    nonlinear eq16 c=0.5
-GC distribution:    unknown (pretending to F)
+GC distribution:    F
 GC method:          pairwise
-Bootstrap used:     Y
-Prediction model:   SVM regression C=0.1, kernel='rbf' (carefully tuned)
+Prevent sparsity:   Y
+Prediction model:   Linear regression
 """
 import numpy as np
-from sklearn.svm import SVR
+from sklearn.linear_model import LinearRegression
 from gen_data import eq16
 from scipy.stats import f
 from itertools import product
@@ -30,9 +30,9 @@ for i, j in product(range(n_nodes), range(n_nodes)):
 
     # make dataset
     x_ur = np.stack([ni[:-1], nj[:-1]], axis=0).T  # UR: y_{t} ~ y_{t-1} + x_{t-1}
-    y_ur = nj[1:]
+    y_ur = nj[1:, np.newaxis]
     x_r = nj[:-1, np.newaxis]  # R: y_{t} ~ y_{t-1}
-    y_r = nj[1:]
+    y_r = nj[1:, np.newaxis]
     x_ur_train, x_ur_test = x_ur[:train_size], x_ur[train_size:]
     y_ur_train, y_ur_test = y_ur[:train_size], y_ur[train_size:]
     x_r_train, x_r_test, y_r_train, y_r_test = x_ur_train.copy(), x_ur_test.copy(), y_ur_train.copy(), y_ur_test.copy()
@@ -41,8 +41,8 @@ for i, j in product(range(n_nodes), range(n_nodes)):
     rng.shuffle(x_r_test[:, 0])
 
     # train model
-    ur = SVR(kernel='rbf', C=0.1).fit(x_ur_train, y_ur_train)
-    r = SVR(kernel='rbf', C=0.1).fit(x_r_train, y_r_train)
+    ur = LinearRegression().fit(x_ur_train, y_ur_train)
+    r = LinearRegression().fit(x_r_train, y_r_train)
 
     # evaluate
     y_ur_test_hat = ur.predict(x_ur_test)
