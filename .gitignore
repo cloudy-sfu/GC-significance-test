@@ -152,3 +152,5 @@ cython_debug/
 .idea/
 results
 !results/.placeholder
+raw
+!raw/.placeholder
