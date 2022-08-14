@@ -9,7 +9,7 @@ Prediction model:   SVM regression C=0.1, kernel='rbf' (carefully tuned)
 """
 import numpy as np
 from sklearn.svm import SVR
-from gen_data import eq16
+from data_chen2004 import eq16
 from scipy.stats import f
 from itertools import product
 

@@ -9,7 +9,7 @@ Prediction model:   Linear regression
 """
 import numpy as np
 from sklearn.linear_model import LinearRegression
-from gen_data import eq15
+from data_chen2004 import eq15
 from scipy.stats import f
 from itertools import product
 
