@@ -8,7 +8,8 @@ from sklearn.linear_model import LinearRegression
 from statsmodels.tools.tools import add_constant
 
 # %% Read dataset
-with open('raw/lorenz96.pkl', 'rb') as f:
+with open('raw/indexes_std.pkl', 'rb') as f:
+# with open('raw/lorenz96.pkl', 'rb') as f:
     x_train, y_train, x_test, y_test = pickle.load(f)
 
 # %% Constants
@@ -52,8 +53,11 @@ for i in range(n_nodes):
     z_val[i, :] = z
 
 # %% Export results
-with open('raw/lorenz96_conditional_LR_wilcoxon_stats.pkl', 'wb') as f:
+with open('raw/indexes_conditional_LR_wilcoxon_stats.pkl', 'wb') as f:
+# with open('raw/lorenz96_conditional_LR_wilcoxon_stats.pkl', 'wb') as f:
     pickle.dump({'z_val': z_val, 'p_val': p_val}, f)
+with open('raw/indexes_names.pkl', 'rb') as f:
+    col_names = pickle.load(f)
 
 # %% Causality heatmap
 fig, ax = plt.subplots(figsize=(10, 8))
@@ -61,9 +65,14 @@ mask = np.zeros_like(p_val, dtype=bool)
 mask[np.diag_indices_from(mask)] = True
 heatmap = sns.heatmap(p_val, mask=mask, square=True, linewidths=.5, cmap='coolwarm',
                       vmin=0, vmax=0.1, annot=True, fmt='.2f')
+# add the column names as labels
+ax.set_yticklabels(col_names, rotation=0)
+ax.set_xticklabels(col_names, rotation=90)
+
 ax.set_ylabel('Cause')
 ax.set_xlabel('Effect')
 fig.subplots_adjust(bottom=0.15, top=0.95)
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-heatmap.get_figure().savefig('results/lorenz96_conditional_LR_wilcoxon.svg')
+heatmap.get_figure().savefig('results/indexes_conditional_LR_wilcoxon.svg')
+# heatmap.get_figure().savefig('results/lorenz96_conditional_LR_wilcoxon.svg')
 plt.close(fig)

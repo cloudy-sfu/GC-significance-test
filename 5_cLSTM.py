@@ -33,8 +33,8 @@ with open('raw/indexes_conditional_cLSTM_L0.1_stats.pkl', 'wb') as f:
     pickle.dump(GC_est, f)
 
 # %% Load results
-# with open('raw/lorenz96_conditional_cLSTM_stats.pkl', 'rb') as f:
-#     GC_est = pickle.load(f)
+with open('raw/indexes_conditional_cLSTM_L0.1_stats.pkl', 'rb') as f:
+    GC_est = pickle.load(f)
 
 # %%
 fig, ax = plt.subplots(figsize=(10, 8))
