@@ -37,13 +37,13 @@ for i in tqdm(range(n_nodes)):
             return np.nan, np.nan
         ur = GridSearchCV(
             SVR(max_iter=5000),
-            {'kernel': ['rbf', 'poly'], 'C': [0.01, 1, 10]},
+            {'kernel': ['rbf', 'poly'], 'C': [0.01, 0.1, 1, 10]},
             scoring='neg_root_mean_squared_error'
         )
         ur.fit(x_ur_train, y_train[:, j])
         r = GridSearchCV(
             SVR(max_iter=5000),
-            {'kernel': ['rbf', 'poly'], 'C': [0.01, 1, 10]},
+            {'kernel': ['rbf', 'poly'], 'C': [0.01, 0.1, 1, 10]},
             scoring='neg_root_mean_squared_error'
         )
         r.fit(x_r_train, y_train[:, j])
@@ -83,6 +83,6 @@ ax.set_ylabel('Cause')
 ax.set_xlabel('Effect')
 fig.subplots_adjust(bottom=0.15, top=0.95)
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-# heatmap.get_figure().savefig('results/indexes_conditional_SVM_wilcoxon.svg')
-heatmap.get_figure().savefig('results/lorenz96_conditional_SVM_wilcoxon.svg')
+# heatmap.get_figure().savefig('results/indexes_conditional_SVM_wilcoxon.eps')
+heatmap.get_figure().savefig('results/lorenz96_conditional_SVM_wilcoxon.eps')
 plt.close(fig)

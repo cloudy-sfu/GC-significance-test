@@ -45,7 +45,7 @@ for j in range(p_.shape[1]):
 ax.legend()
 ax.set_xlabel('χ^2 multiplier')
 ax.set_ylabel('Ratio of causality pairs')
-fig.savefig('results/indexes_chisq_multiplier.svg')
+fig.savefig('results/indexes_chisq_multiplier.eps')
 plt.close(fig)
 
 # %% Select the best chi2 multiplier
@@ -69,7 +69,7 @@ ax.set_xlabel('Effect')
 ax.set_title(f'c0 = {c0.__round__(3)}')
 fig.subplots_adjust(bottom=0.27, top=0.95)
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-heatmap.get_figure().savefig('results/indexes_combined_chisq.svg')
+heatmap.get_figure().savefig('results/indexes_combined_chisq.eps')
 plt.close(fig)
 
 # %% Output as items

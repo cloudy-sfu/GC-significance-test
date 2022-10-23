@@ -51,13 +51,13 @@ with open('raw/lorenz96.pkl', 'wb') as f:
 fig, ax = plt.subplots(figsize=(10, 8))
 mask = np.zeros_like(gc, dtype=bool)
 mask[np.diag_indices_from(mask)] = True
-heatmap = sns.heatmap(gc, mask=mask, square=True, linewidths=.5, cmap='coolwarm',
+heatmap = sns.heatmap(1 - gc, mask=mask, square=True, linewidths=.5, cmap='coolwarm',
                       vmin=0, vmax=0.1, annot=True, fmt='.2f')
 ax.set_ylabel('Cause')
 ax.set_xlabel('Effect')
 fig.subplots_adjust(bottom=0.15, top=0.95)
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-heatmap.get_figure().savefig('results/lorenz96_ground_truth.svg')
+heatmap.get_figure().savefig('results/lorenz96_ground_truth.eps')
 plt.close(fig)
 
 with open('raw/lorenz96_truth.pkl', 'wb') as f:

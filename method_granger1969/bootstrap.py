@@ -3,19 +3,23 @@ import pickle
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-from scipy.stats import wilcoxon
+from scipy.stats import f, wilcoxon
 from sklearn.linear_model import LinearRegression
 from statsmodels.tools.tools import add_constant
 
 # %% Read dataset
-# with open('raw/indexes_std.pkl', 'rb') as f:
-with open('raw/lorenz96.pkl', 'rb') as f:
-    x_train, y_train, x_test, y_test = pickle.load(f)
+with open('raw/lorenz96.pkl', 'rb') as f_:
+    x_train, y_train, x_test, y_test = pickle.load(f_)
 
 # %% Constants
 n_nodes = x_train.shape[2]
+k = 2 * x_train.shape[1] + 1
+n = x_test.shape[0]
+q = x_train.shape[1]
+f_val = np.full((n_nodes, n_nodes), np.nan)
+fp_val = np.full((n_nodes, n_nodes), np.nan)
 z_val = np.full((n_nodes, n_nodes), np.nan)
-p_val = np.full((n_nodes, n_nodes), np.nan)
+zp_val = np.full((n_nodes, n_nodes), np.nan)
 
 # %% i -> j
 rng = np.random.RandomState(seed=23846)
@@ -41,6 +45,7 @@ for i in range(n_nodes):
     r.fit(x_r_train, y_train)
     y_ur_test_hat = ur.predict(x_ur_test)
     y_r_test_hat = r.predict(x_r_test)
+
     # https://doi.org/10.1016/j.cmpb.2022.106669 Therefore, we decided to test if the error obtained by the model,
     # which uses both time series for prediction is significantly smaller than the error obtained by the model using
     # only one time series as an input by using Wilcoxon signed-rank test [52].
@@ -48,31 +53,14 @@ for i in range(n_nodes):
     err_r = (y_r_test_hat - y_test) ** 2
     wilcoxon_results = wilcoxon(x=err_r, y=err_ur, method='approx')
     w, p, z = wilcoxon_results.statistic, wilcoxon_results.pvalue, wilcoxon_results.zstatistic
-
-    p_val[i, :] = p
+    zp_val[i, :] = p
     z_val[i, :] = z
 
+    ssr_ur = np.sum(err_ur, axis=0)
+    ssr_r = np.sum(err_ur, axis=0)
+    f_val[i, :] = (ssr_r - ssr_ur) * (n - k) / ssr_ur / q  # [(ssr_r - ssr_ur) / q] / [ssr_ur / (n-k)]
+    fp_val[i, :] = 1 - f(dfn=q, dfd=n - k).cdf(f_val[i, :])
+
 # %% Export results
-# with open('raw/indexes_conditional_LR_wilcoxon_stats.pkl', 'wb') as f:
-with open('raw/lorenz96_conditional_LR_wilcoxon_stats.pkl', 'wb') as f:
-    pickle.dump({'z_val': z_val, 'p_val': p_val}, f)
-with open('raw/indexes_names.pkl', 'rb') as f:
-    col_names = pickle.load(f)
-
-# %% Causality heatmap
-fig, ax = plt.subplots(figsize=(10, 8))
-mask = np.zeros_like(p_val, dtype=bool)
-mask[np.diag_indices_from(mask)] = True
-heatmap = sns.heatmap(p_val, mask=mask, square=True, linewidths=.5, cmap='coolwarm',
-                      vmin=0, vmax=0.1, annot=True, fmt='.2f')
-# add the column names as labels
-# ax.set_yticklabels(col_names, rotation=0)
-# ax.set_xticklabels(col_names, rotation=90)
-
-ax.set_ylabel('Cause')
-ax.set_xlabel('Effect')
-fig.subplots_adjust(bottom=0.15, top=0.95)
-sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-# heatmap.get_figure().savefig('results/indexes_conditional_LR_wilcoxon.eps')
-heatmap.get_figure().savefig('results/lorenz96_conditional_LR_wilcoxon.eps')
-plt.close(fig)
+with open('raw/lorenz96_conditional_bootstrap_stats.pkl', 'wb') as f_:
+    pickle.dump({'f_val': f_val, 'f_p': fp_val, 'z_val': z_val, 'z_p': zp_val}, f_)

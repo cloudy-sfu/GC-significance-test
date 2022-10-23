@@ -29,7 +29,7 @@ k = p.shape[2]
 @np.vectorize
 def model_corr_optimize(c):
     chi_ = -2 * np.sum(np.log(p), axis=2) * c
-    pred = chi2.cdf(chi_, df=2 * k) > 0.99  # confidence level: 95%
+    pred = chi2.cdf(chi_, df=2 * k) > 0.99  # confidence level: 99%
     return - np.mean(remove_diag(pred) == pred_truth)
 
 
@@ -55,5 +55,5 @@ ax.set_xlabel('Effect')
 ax.set_title(f'c0 = {c0.__round__(3)}')
 fig.subplots_adjust(bottom=0.15, top=0.95)
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-heatmap.get_figure().savefig('results/lorenz96_combined_chisq.svg')
+heatmap.get_figure().savefig('results/lorenz96_combined_chisq.eps')
 plt.close(fig)
