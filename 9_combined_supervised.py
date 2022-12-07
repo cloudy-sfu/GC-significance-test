@@ -53,7 +53,7 @@ connectivity = mic_connectivity(c_grid, alpha_grid)
 
 cmap = get_cmap('coolwarm')
 mycolors = [cmap(0.1), cmap(0.3), cmap(0.9)]
-padding = np.array([[-0.02, 0.03, -0.03],
+padding = np.array([[0.02, -0.03, -0.02],
                     [0.1, 0.5, 0.5]])
 fig, ax = plt.subplots(figsize=(3.75, 3))
 best_c = np.zeros(shape=alpha.shape)
@@ -63,8 +63,8 @@ for j in range(alpha.shape[0]):
     ax.plot(c, diff_1, label=f'alpha = {alpha[j]}', c=mycolors[j])
     ax.scatter(c[b], diff_1[b], marker='x', color=mycolors[j])
     best_c[j] = c[b]
-    ax.annotate(f'c={round(c[b], 2)}', (c[b] + padding[0, j], diff_1[b] + padding[1, j]),
-                rotation=30, weight='light')
+    ax.text(c[b] + padding[0, j], diff_1[b] + padding[1, j], f'c={round(c[b], 2)}',
+            weight='ultralight', rotation=30)
 ax.legend(frameon=False)
 ax.set_ylim([1.5, 18])
 fig.subplots_adjust(bottom=0.15, left=0.2, right=0.98, top=0.98)
