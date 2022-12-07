@@ -35,7 +35,7 @@ with open('raw/lorenz96_conditional_MLP_wilcoxon_stats.pkl', 'rb') as f:
 mlp = (mlp['p_val'] <= 0.01).astype('int')
 with open('raw/lorenz96_combined_chisq_p.pkl', 'rb') as f:
     combined = pickle.load(f)
-combined = (combined <= 0.01).astype('int')
+combined = (combined['p'] <= 0.01).astype('int')
 with open('raw/lorenz96_truth.pkl', 'rb') as f:
     ground_truth = pickle.load(f)
 

@@ -22,6 +22,7 @@ def simulate_lorenz_96(n_neurons, length, random_state=None):
     # Solve ODE
     rng = np.random.RandomState(seed=random_state)
     x0 = rng.normal(scale=0.01, size=n_neurons)
+
     t = np.linspace(0, (length + burn_in) * delta_t, length + burn_in)
     x_ = odeint(lorenz, x0, t, args=(n_neurons,))
     x_ += rng.normal(scale=sd, size=(length + burn_in, n_neurons))

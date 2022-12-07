@@ -48,11 +48,11 @@ with open('raw/lorenz96.pkl', 'wb') as f:
     pickle.dump([x_train, y_train, x_test, y_test], f)
 
 # %% Draw ground truth
-fig, ax = plt.subplots(figsize=(10, 8))
+fig, ax = plt.subplots(figsize=(5, 4))
 mask = np.zeros_like(gc, dtype=bool)
 mask[np.diag_indices_from(mask)] = True
 heatmap = sns.heatmap(1 - gc, mask=mask, square=True, linewidths=.5, cmap='coolwarm',
-                      vmin=0, vmax=0.1, annot=True, fmt='.2f')
+                      vmin=0, vmax=0.1, annot=True, fmt='.0f')
 ax.set_ylabel('Cause')
 ax.set_xlabel('Effect')
 fig.subplots_adjust(bottom=0.15, top=0.95)
