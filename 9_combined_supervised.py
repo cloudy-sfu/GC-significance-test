@@ -77,7 +77,7 @@ plt.close(fig)
 # %% Export the result (alpha = 0.01)
 @np.vectorize
 def decimal_non_zero(x):
-    return format(x, '.2f').lstrip('0')
+    return format(x, '.2f').removeprefix('0')
 
 
 c0 = best_c[0]

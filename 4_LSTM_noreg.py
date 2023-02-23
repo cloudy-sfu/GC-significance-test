@@ -17,7 +17,9 @@ z_val = np.full((n_nodes, n_nodes), np.nan)
 p_val = np.full((n_nodes, n_nodes), np.nan)
 rng = np.random.RandomState(seed=23846)
 stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=60)
-tf.random.set_seed(seed=748697)
+# https://www.tensorflow.org/api_docs/python/tf/keras/utils/set_random_seed
+# Although random seed is fixed, we still observe uncertainty in training neural network.
+tf.keras.utils.set_random_seed(748697)
 
 # %% Train
 for i in range(n_nodes):

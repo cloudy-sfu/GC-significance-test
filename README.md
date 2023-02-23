@@ -1,3 +1,5 @@
-# GC-significance-test
+# GC significance test
 
-Supplemental materials: [FILE](./supplementary-materials.pdf)
+The significance test for Granger causality of financial risks in stock indices
+
+[Supplemental material](./supplementary-materials.pdf)
